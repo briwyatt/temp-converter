@@ -1,31 +1,65 @@
-function toCelsius (userTemp) {
-    return (userTemp - 32) * (5/9);
+var output = document.getElementById("output-target")
+var tempInput = document.getElementById("tempField")
+var button = document.getElementById("converter");
+var celBtn = document.getElementById("c");
+var farBtn = document.getElementById("f");
+var clearText = document.getElementById("clear");
+
+button.addEventListener("click", determineConverter);
+
+tempInput.addEventListener("keypress", pressed);
+function pressed(e) {
+  console.log("event", e);
+    if (e.keyCode === 13) {
+      determineConverter()
+    }
 }
 
-function toFahrenheit (userTemp) {
-    return (userTemp) * 9/5 + 32;
-}
-
-var temperatureInput = document.getElementById("tempField");
-var buttonSubmit = document.getElementById("converter");
-var celsiusRadio = document.getElementById("celsiusRadio");
-var outputElement = document.getElementById("output-target");
-
-temperatureInput.addEventListener("keypress", pressed); //object passed to event handler w/ lots of info about what key? where click??? etc
-buttonSubmit.addEventListener("click", determineConverter);
 
 function determineConverter() {
-    var convertedTemperature;
-    if (celsiusRadio.checked) {
-        convertedTemperature = toCelsius(temperatureInput.value);  //value gets value inside tempInput text box
-    } else {
-        convertedTemperature = toFahrenheit(temperatureInput.value); 
-    }
-    outputElement.innerHTML = convertedTemperature;
+  var userTemp = tempInput.value
+
+  if(celBtn.checked){
+    toCelsius(userTemp)
+  }else if (farBtn.checked) {
+    toFahrenheit(userTemp)
+  }else {
+    alert("Please select a conversion");
+  }
 }
 
-function pressed(enterPress) {
-    if (enterPress.keyCode === 13){
-        determineConverter();
-    }
+
+function toCelsius (userTemp) {
+  finalTemp = Math.ceil(userTemp - 32) * (5/ 9);
+
+  if(finalTemp <= 0){
+  output.innerHTML = `<p style="color:blue">${finalTemp}<p>`;
+  } else if (finalTemp >= 32){
+  output.innerHTML = `<p style="color:red">${finalTemp}<p>`;
+  } else {
+  output.innerHTML = `<p style="color:green">${finalTemp}<p>`;
+  }
+
 }
+
+
+function toFahrenheit (userTemp) {
+  console.log("usertemp", userTemp)
+  finalTemp = Math.ceil(userTemp * (9/ 5) + 32);
+
+  if(finalTemp <= 32){
+  output.innerHTML = `<p style="color:blue">${finalTemp}<p>`;
+  } else if (finalTemp >= 90){
+  output.innerHTML = `<p style="color:red">${finalTemp}<p>`;
+  } else {
+  output.innerHTML = `<p style="color:green">${finalTemp}<p>`;
+  }
+}
+
+
+clearText.addEventListener("click", function (event){
+  tempField.value = "";
+  output.innerHTML = "";
+  celBtn.checked = false;
+  farBtn.checked = false;
+});
